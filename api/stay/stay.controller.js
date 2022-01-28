@@ -5,11 +5,12 @@ const stayService = require('./stay.service')
 
 async function getStays(req, res) {
     try {
-        console.log(req.query)
+        // console.log(req.query)
         const stays = await stayService.query(req.query)
         res.send(stays)
     } catch (err) {
-        logger.error('Cannot get stays', err)
+        // logger.error('Cannot get stays', err)
+        console.log(err)
         res.status(500).send({ err: 'Failed to get stays' })
     }
 }
