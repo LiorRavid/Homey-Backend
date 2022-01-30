@@ -84,11 +84,11 @@ function _buildCriteria(filterBy) {
         { $and: [{ price: { $gt: +filterBy.minPrice}},{price: {$lt: +filterBy.maxPrice} }] }
     )
 
-    // if(filterBy['Wifi']){
-    //     criteria.$and.push(
-    //         {"amenities":{"Wifi"}}
-    //     )
-    // }
+    if(filterBy['Wifi']){
+        criteria.$and.push(
+            {"amenities":"Wifi"}
+        )
+    }
 
     // if(filterBy['TV']){
     //     entities = entities.filter(stay => {
