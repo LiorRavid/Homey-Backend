@@ -83,15 +83,11 @@ function _buildCriteria(filterBy) {
     criteria.$and.push(
         { $and: [{ price: { $gt: +filterBy.minPrice}},{price: {$lt: +filterBy.maxPrice} }] }
     )
-    // if (filterBy.minPrice && filterBy.maxPrice) {
-    //     // if(filterBy.minPrice !== -Infinity)
-    //     // criteria.price = { $and:[{$gt:filterBy.minPrice},{$lt: filterBy.maxPrice}]}
-    //     // criteria.price = { $and:[{price:{$gt:filterBy.minPrice}},{price:{$lt: filterBy.maxPrice}}]}
-    //     // criteria.price = { $gt:filterBy.minPrice,$lt: filterBy.maxPrice}
-    //     console.log('criteria2',criteria.price)
-    // }
-    // if(filterBy['Wifi']){
 
+    // if(filterBy['Wifi']){
+    //     criteria.$and.push(
+    //         {"amenities":{"Wifi"}}
+    //     )
     // }
 
     // if(filterBy['TV']){
