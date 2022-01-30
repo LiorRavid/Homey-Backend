@@ -2,11 +2,11 @@ const dbService = require('../../services/db.service')
 const ObjectId = require('mongodb').ObjectId
 const asyncLocalStorage = require('../../services/als.service')
 
-async function query(filterBy = {}) {
+async function query(filterBy) {
     try {
         console.log('filterBy', filterBy)
         const criteria = _buildCriteria(filterBy)
-        console.log('full criteria', JSON.stringify(criteria, null, 2))
+        console.log('criteria', criteria)
         const collection = await dbService.getCollection('stay')
         const stays = await collection.find(criteria).toArray()
         // console.log('stays at criteria',stays)
@@ -67,6 +67,7 @@ async function add(stay) {
 }
 
 function _buildCriteria(filterBy) {
+    if(!filterBy || !Object.keys(filterBy).length) return {}
     const criteria = { $and: [] }
     console.log('filter', filterBy)
     if (filterBy.location) {
@@ -80,9 +81,11 @@ function _buildCriteria(filterBy) {
             ]
         })
     }
-    criteria.$and.push(
-        { $and: [{ price: { $gt: +filterBy.minPrice}},{price: {$lt: +filterBy.maxPrice} }] }
-    )
+    if(filterBy.minPrice || filterBy.maxPrice){
+        criteria.$and.push(
+            { $and: [{ price: { $gt: +filterBy.minPrice}},{price: {$lt: +filterBy.maxPrice} }] }
+        )
+    }
 
     if(filterBy['Wifi']){
         criteria.$and.push(
@@ -90,33 +93,39 @@ function _buildCriteria(filterBy) {
         )
     }
 
-    // if(filterBy['TV']){
-    //     entities = entities.filter(stay => {
-    //         return (stay.amenities.includes('TV'))
-    //     })
-    // }
-    // if(filterBy['Kitchen']){
-    //     entities = entities.filter(stay => {
-    //         return (stay.amenities.includes('Kitchen'))
-    //     })
-    // }
-    // if(filterBy['AC']){
-    //     entities = entities.filter(stay => {
-    //         return (stay.amenities.includes('AC'))
-    //     })
-    // }
+    if(filterBy['TV']){
+        criteria.$and.push(
+            {"amenities":"TV"}
+        )
+    }
+    if(filterBy['Kitchen']){
+        criteria.$and.push(
+            {"amenities":"Kitchen"}
+        )
+    }
+    if(filterBy['AC']){
+        criteria.$and.push(
+            {"amenities":"AC"}
+        )
+    }
 
-    // if(filterBy['Smoking allowed']){
-    //     entities = entities.filter(stay => {
-    //         return (stay.amenities.includes('Smoking allowed'))
-    //     })
-    // }
+    if(filterBy['Smoking allowed']){
+        criteria.$and.push(
+            {"amenities":"Smoking allowed"}
+        )
+    }
 
-    // if(filterBy['Pets allowed']){
-    //     entities = entities.filter(stay => {
-    //         return (stay.amenities.includes('Pets allowed'))
-    //     })
-    // }
+    if(filterBy['Pets allowed']){
+        criteria.$and.push(
+            {"amenities":"Pets allowed"}
+        )
+    }
+
+    if(filterBy.hostId){
+        criteria.$and.push(
+            {"host._id":filterBy.hostId}
+        )
+    }
     return criteria
 }
 
